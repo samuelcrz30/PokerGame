@@ -1,0 +1,8 @@
+slug = "poker-game"
+bundle = [
+    "docs/README.pdf",
+    "tests/__init__.py",
+    "tests/test_poker.py",
+    "src/*.py",
+]
+todo = ["main.py"]
