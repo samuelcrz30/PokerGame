@@ -20,3 +20,8 @@ def get_winner(
 
     # ejemploo
     return None, player1_hand
+
+
+def get_best_hand(p1_hand, p2_hand):
+    p1_hand.cards
+    p2_hand.cards
