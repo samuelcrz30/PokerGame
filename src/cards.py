@@ -101,15 +101,21 @@ class Hand:
 
         if len(values) < 5:
             return None
-        counter = 0
+
+        counter = 1
         for i in range(1, len(values)):
             if values[i] == values[i - 1] + 1:
                 counter += 1
                 if counter == 5:
-                    for value, num in Card.SORTED_VALUES.items():
-                        if num == values[i]:
-                            self.cat = Hand.STRAIGHT
-                            return self.cat, value
+                    self.cat = Hand.STRAIGHT
+                    high_value = values[i]
+                    for char, num in Card.SORTED_VALUES.items():
+                        if num == high_value:
+                            return self.cat, char
+            else:
+                counter = 1
+
+        return None
 
     def flush(self):
         for suit in Card.SUITS:
