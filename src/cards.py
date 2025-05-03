@@ -92,7 +92,7 @@ class Hand:
         card_values = [card.value for card in self.cards]
         for card in reversed(Card.SORTED_VALUES):
             if card_values.count(card) == 3:
-                self.cat = Hand.THREE_OF_A_KIND
+                self.cat = Hand.FOUR_OF_A_KIND
                 return self.cat, card
         return None
 
