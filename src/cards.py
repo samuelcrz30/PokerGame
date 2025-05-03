@@ -101,21 +101,15 @@ class Hand:
 
         if len(values) < 5:
             return None
-
-        counter = 1
+        counter = 0
         for i in range(1, len(values)):
             if values[i] == values[i - 1] + 1:
                 counter += 1
                 if counter == 5:
-                    self.cat = Hand.STRAIGHT
-                    high_value = values[i]
-                    for char, num in Card.SORTED_VALUES.items():
-                        if num == high_value:
-                            return self.cat, char
-            else:
-                counter = 1
-
-        return None
+                    for value, num in Card.SORTED_VALUES.items():
+                        if num == values[i]:
+                            self.cat = Hand.STRAIGHT
+                            return self.cat, value
 
     def flush(self):
         for suit in Card.SUITS:
@@ -184,8 +178,25 @@ class Hand:
     def __eq__(self, other: Hand) -> bool:
         return self.winner_category() == other.winner_category()
 
-    def __gt__(self, other: Hand) -> bool:
-        return self.winner_category() > other.winner_category()
-
-
-    
+    def __gt__(self, other: Hand) -> bool: # POR VER, HECHO CON DEEP
+        # Primero comparamos categorías
+        if self.cat > other.cat:
+            return True
+        if self.cat < other.cat:
+            return False
+        
+        # Misma categoría: comparamos ranks
+        if isinstance(self.cat_rank, tuple):
+            for s_rank, o_rank in zip(self.cat_rank, other.cat_rank):
+                if Card.SORTED_VALUES[s_rank] > Card.SORTED_VALUES[o_rank]:
+                    return True
+                if Card.SORTED_VALUES[s_rank] < Card.SORTED_VALUES[o_rank]:
+                    return False
+        else:
+            if Card.SORTED_VALUES[self.cat_rank] > Card.SORTED_VALUES[other.cat_rank]:
+                return True
+            if Card.SORTED_VALUES[self.cat_rank] < Card.SORTED_VALUES[other.cat_rank]:
+                return False
+        
+        # Desempate: comparamos cartas individuales ordenadas
+        return sorted(self.cards, reverse=True) > sorted(other.cards, reverse=True)
