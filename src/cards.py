@@ -3,22 +3,22 @@ from __future__ import annotations
 
 class Card:
     SORTED_VALUES = {
-        "2": 2,
-        "3": 3,
-        "4": 4,
-        "5": 5,
-        "6": 6,
-        "7": 7,
-        "8": 8,
-        "9": 9,
-        "10": 10,
-        "J": 11,
-        "Q": 12,
-        "K": 13,
-        "A": 14,
+        '2': 2,
+        '3': 3,
+        '4': 4,
+        '5': 5,
+        '6': 6,
+        '7': 7,
+        '8': 8,
+        '9': 9,
+        '10': 10,
+        'J': 11,
+        'Q': 12,
+        'K': 13,
+        'A': 14,
     }
 
-    SUITS = ["❤", "♠", "◆", "♣"]
+    SUITS = ['❤', '♠', '◆', '♣']
 
     def __init__(self, id: str):
         self.id = id
@@ -123,7 +123,7 @@ class Hand:
     def full_house(self):
         three = self.three_of_a_kind()
         pair = self.one_pair()
-    
+
         if three and pair and three[1] != pair[1]:
             self.cat = Hand.FULL_HOUSE
             return self.cat, (three[1], pair[1])
@@ -138,17 +138,17 @@ class Hand:
         return None
 
     def straight_flush(self):
-            for s in Card.SUITS:
-                suited = [c for c in self.cards if c.suit == s]
-                if len(suited) >= 5:
-                    values = sorted(set(Card.SORTED_VALUES[c.value] for c in suited))
-                    for i in range(len(values) - 4):
-                        if values[i + 4] - values[i] == 4:
-                            for k, v in Card.SORTED_VALUES.items():
-                                if v == values[i + 4]:
-                                    self.cat = Hand.STRAIGHT_FLUSH
-                                    return self.cat, k
-            return None
+        for s in Card.SUITS:
+            suited = [c for c in self.cards if c.suit == s]
+            if len(suited) >= 5:
+                values = sorted(set(Card.SORTED_VALUES[c.value] for c in suited))
+                for i in range(len(values) - 4):
+                    if values[i + 4] - values[i] == 4:
+                        for k, v in Card.SORTED_VALUES.items():
+                            if v == values[i + 4]:
+                                self.cat = Hand.STRAIGHT_FLUSH
+                                return self.cat, k
+        return None
 
     def winner_category(self) -> tuple[int, str | tuple[str, str]]:
         checkers = [
@@ -168,36 +168,29 @@ class Hand:
                 return result
         return self.high_card()
 
-    def __iter__(self):
-        for card in self.hand:
-            yield card
-
     def __lt__(self, other: Hand) -> bool:
         return self.winner_category() < other.winner_category()
 
     def __eq__(self, other: Hand) -> bool:
         return self.winner_category() == other.winner_category()
 
-    def __gt__(self, other: Hand) -> bool: # POR VER, HECHO CON DEEP
-        # Primero comparamos categorías
+    def __gt__(self, other: Hand) -> bool:
         if self.cat > other.cat:
             return True
         if self.cat < other.cat:
             return False
-        
-        # Misma categoría: comparamos ranks
+
         if isinstance(self.cat_rank, tuple):
-            for s_rank, o_rank in zip(self.cat_rank, other.cat_rank):
-                if Card.SORTED_VALUES[s_rank] > Card.SORTED_VALUES[o_rank]:
+            for self_rank, other_rank in zip(self.cat_rank, other.cat_rank):
+                if Card.SORTED_VALUES[self_rank] > Card.SORTED_VALUES[other_rank]:
                     return True
-                if Card.SORTED_VALUES[s_rank] < Card.SORTED_VALUES[o_rank]:
+                if Card.SORTED_VALUES[self_rank] < Card.SORTED_VALUES[other_rank]:
                     return False
         else:
             if Card.SORTED_VALUES[self.cat_rank] > Card.SORTED_VALUES[other.cat_rank]:
                 return True
             if Card.SORTED_VALUES[self.cat_rank] < Card.SORTED_VALUES[other.cat_rank]:
                 return False
-        
-        # Desempate: comparamos cartas individuales ordenadas
+
         return sorted(self.cards, reverse=True) > sorted(other.cards, reverse=True)
 
