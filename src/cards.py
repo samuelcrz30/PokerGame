@@ -102,12 +102,12 @@ class Hand:
         if len(values) < 5:
             return None
         counter = 0
-        for i in range(1, len(values)):
-            if values[i] == values[i - 1] + 1:
+        for current_index in range(1, len(values)):
+            if values[current_index] == values[current_index - 1] + 1:
                 counter += 1
                 if counter == 5:
                     for value, num in Card.SORTED_VALUES.items():
-                        if num == values[i]:
+                        if num == values[current_index]:
                             self.cat = Hand.STRAIGHT
                             return self.cat, value
 
@@ -138,16 +138,16 @@ class Hand:
         return None
 
     def straight_flush(self):
-        for s in Card.SUITS:
-            suited = [c for c in self.cards if c.suit == s]
+        for suit in Card.SUITS:
+            suited = [card for card in self.cards if card.suit == suit]
             if len(suited) >= 5:
-                values = sorted(set(Card.SORTED_VALUES[c.value] for c in suited))
-                for i in range(len(values) - 4):
-                    if values[i + 4] - values[i] == 4:
-                        for k, v in Card.SORTED_VALUES.items():
-                            if v == values[i + 4]:
+                values = sorted(set(Card.SORTED_VALUES[card.value] for card in suited))
+                for current_index in range(len(values) - 4):
+                    if values[current_index + 4] - values[current_index] == 4:
+                        for key, value in Card.SORTED_VALUES.items():
+                            if value == values[current_index + 4]:
                                 self.cat = Hand.STRAIGHT_FLUSH
-                                return self.cat, k
+                                return self.cat, key
         return None
 
     def winner_category(self) -> tuple[int, str | tuple[str, str]]:
