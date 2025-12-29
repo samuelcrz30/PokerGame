@@ -21,17 +21,17 @@ Toda la lógica de evaluación y comparación se realiza automáticamente.
 
 ## Estructura del proyecto
 
-PokerGame/
-│
-├── src/
-│   ├── cards.py
-│   ├── game.py
-│   ├── helpers.py
-│   └── roles.py
-│
-├── tests/
-│
-└── README.md
+PokerGame/  
+│  
+├── src/  
+│   ├── cards.py  
+│   ├── game.py  
+│   ├── helpers.py  
+│   └── roles.py  
+│  
+├── tests/  
+│  
+└── README.md  
 
 ---
 
